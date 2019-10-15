@@ -10,112 +10,136 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
 
     return Scaffold(
         body: Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        CustomPaint(
-          size: size,
-          painter: LoginBackground(isJoin:Provider.of<JoinOrLogin>(context).isJoin),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
+          alignment: Alignment.center,
           children: <Widget>[
-            _logoImage,
-            Stack(children: <Widget>[
-              _inputForm(size),
-              _authButton(size),
-            ]),
-            Container(
-              height: size.height * 0.1,
+            CustomPaint(
+              size: size,
+              painter: LoginBackground(isJoin: Provider
+                  .of<JoinOrLogin>(context)
+                  .isJoin),
             ),
-            Text("Don't Have an Account? Create One"),
-            Container(
-              height: size.height * 0.05,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                _logoImage,
+                Stack(children: <Widget>[
+                  _inputForm(size),
+                  _authButton(size),
+                ]),
+                Container(
+                  height: size.height * 0.1,
+                ),
+                Consumer<JoinOrLogin>(
+                  builder: (BuildContext context, JoinOrLogin joinOrLogin,
+                      Widget child) =>
+                      GestureDetector(
+                          onTap: () {
+                            joinOrLogin.toggle();
+                          },
+                          child: Text(joinOrLogin.isJoin ? "Already Have an Account? Sign in": "Don't Have an Account? Create One",
+                            style: TextStyle(color: joinOrLogin.isJoin ? Colors.red : Colors.blue ),)
+                      ),
+                ),
+                Container(
+                  height: size.height * 0.05,
+                )
+              ],
             )
           ],
-        )
-      ],
-    ));
+        ));
   }
 
-  Widget get _logoImage => Expanded(
-    child: Padding(
-      padding: const EdgeInsets.only(top:40, left: 24, right: 24),
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child: CircleAvatar(
-          backgroundImage: NetworkImage("https://picsum.photos/200"),
+  Widget get _logoImage =>
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 40, left: 24, right: 24),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage("https://picsum.photos/200"),
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
-  Widget _authButton(Size size) => Positioned(
+  Widget _authButton(Size size) =>
+      Positioned(
         left: size.width * 0.15,
         right: size.width * 0.15,
         bottom: 0,
         child: SizedBox(
           height: 50,
           child: RaisedButton(
-              child: Text("Login", style: TextStyle(fontSize: 20, color: Colors.white), ),
+              child: Text(
+                "Login", style: TextStyle(fontSize: 20, color: Colors.white),),
               color: Colors.blue,
               shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
               onPressed: () {
-                if(_formKey.currentState.validate()){
+                if (_formKey.currentState.validate()) {
                   print(_passwordController.text.toString());
                 }
               }),
         ), //RaisedButton
       );
 
-  Widget _inputForm(Size _size) => Padding(
+  Widget _inputForm(Size _size) =>
+      Padding(
         padding: EdgeInsets.all(_size.width * 0.05),
         child: Card(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           elevation: 6,
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 12, right: 16, top: 12, bottom: 32),
+            const EdgeInsets.only(left: 12, right: 16, top: 12, bottom: 32),
             child: Form(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              key: _formKey,
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.account_circle), labelText: "Email"),
-                  validator: (String value) {
-                    if (value.isEmpty)
-                      return "Please input correct Email";
-                    else
-                      return null;
-                  },
-                ),
-                TextFormField(
-                  obscureText: true,
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.vpn_key), labelText: "Password"),
-                  validator: (String value) {
-                    if (value.isEmpty)
-                      return "Please input correct password";
-                    else
-                      return null;
-                  },
-                ),
-                Container(
-                  height: 8,
-                ),
-                Text("Forget Password")
-              ],
-            )),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  key: _formKey,
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.account_circle), labelText: "Email"),
+                      validator: (String value) {
+                        if (value.isEmpty)
+                          return "Please input correct Email";
+                        else
+                          return null;
+                      },
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.vpn_key), labelText: "Password"),
+                      validator: (String value) {
+                        if (value.isEmpty)
+                          return "Please input correct password";
+                        else
+                          return null;
+                      },
+                    ),
+                    Container(
+                      height: 8,
+                    ),
+                    
+                    Consumer<JoinOrLogin>(
+                      builder: (context, value, child) => Opacity(
+                        opacity: value.isJoin ? 0 : 1,
+                          child: Text("Forget Password")
+                      ),
+                    )
+                  ],
+                )),
           ),
         ),
       );
