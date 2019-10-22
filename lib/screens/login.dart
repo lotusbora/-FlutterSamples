@@ -63,30 +63,33 @@ class AuthPage extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.contain,
             child: CircleAvatar(
-              backgroundImage: NetworkImage("https://picsum.photos/200"),
+              backgroundImage: AssetImage("assets:/login.gif"),
             ),
           ),
         ),
       );
 
-  Widget _authButton(Size size) =>
-      Positioned(
+  Widget _authButton(Size size) => Positioned(
         left: size.width * 0.15,
         right: size.width * 0.15,
         bottom: 0,
         child: SizedBox(
           height: 50,
-          child: RaisedButton(
-              child: Text(
-                "Login", style: TextStyle(fontSize: 20, color: Colors.white),),
-              color: Colors.blue,
-              shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  print(_passwordController.text.toString());
-                }
-              }),
+          child: Consumer<JoinOrLogin>(
+            builder: (context, joinOrLogin, child) => RaisedButton(
+                child: Text(
+                  joinOrLogin.isJoin ? "Join" : "Login",
+                  style: TextStyle(fontSize: 20, color: Colors.white)
+                ),
+                color: joinOrLogin.isJoin ? Colors.red : Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    print(_passwordController.text.toString());
+                  }
+                }),
+          ),
         ), //RaisedButton
       );
 
@@ -135,7 +138,7 @@ class AuthPage extends StatelessWidget {
                     Consumer<JoinOrLogin>(
                       builder: (context, value, child) => Opacity(
                         opacity: value.isJoin ? 0 : 1,
-                          child: Text("Forget Password")
+                          child: Text("Forget Password") //Opacity
                       ),
                     )
                   ],
