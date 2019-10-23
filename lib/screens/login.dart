@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersamples/data/join_or_login.dart';
 import 'package:fluttersamples/helper/login_background.dart';
 import 'package:provider/provider.dart';
+
+import 'main_page.dart';
 
 class AuthPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -56,6 +59,34 @@ class AuthPage extends StatelessWidget {
         ));
   }
 
+  void _register(BuildContext context) async {
+    final AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text, password: _passwordController.text);
+    final FirebaseUser user = result.user;
+
+    if(user == null) {
+      final snackBar = SnackBar(content: Text('Please try again later.'));
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+
+//    Navigator.push(context,
+//        MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
+  }
+
+  void _login(BuildContext context) async {
+    final AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text, password: _passwordController.text);
+    final FirebaseUser user = result.user;
+
+    if(user == null) {
+      final snackBar = SnackBar(content: Text('Please try again later.'));
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+
+//    Navigator.push(context,
+//        MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
+  }
+
   Widget get _logoImage =>
       Expanded(
         child: Padding(
@@ -63,7 +94,7 @@ class AuthPage extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.contain,
             child: CircleAvatar(
-              backgroundImage: AssetImage("assets:/login.gif"),
+              backgroundImage: AssetImage("assets/login.gif"),
             ),
           ),
         ),
@@ -86,7 +117,7 @@ class AuthPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25)),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    print(_passwordController.text.toString());
+                    joinOrLogin.isJoin ? _register(context) : _login(context);
                   }
                 }),
           ),
