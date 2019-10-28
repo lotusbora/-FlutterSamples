@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersamples/screens/login.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,27 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<FirebaseUser>(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context, snapshot) {
+
+        if(snapshot.data == null ) {
+          return ChangeNotifierProvider<JoinOrLogin>.value(
+              value: JoinOrLogin(),
+              child: AuthPage());
+        }
+        else {
+
+        }
+      }
+    );
+  }
+}
+
 
 //class MyApp extends StatelessWidget {
 //  // This widget is the root of your application.

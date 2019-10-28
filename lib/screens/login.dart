@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttersamples/data/join_or_login.dart';
 import 'package:fluttersamples/helper/login_background.dart';
 import 'package:provider/provider.dart';
-
 import 'main_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -135,9 +134,9 @@ class AuthPage extends StatelessWidget {
             padding:
             const EdgeInsets.only(left: 12, right: 16, top: 12, bottom: 32),
             child: Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  key: _formKey,
                   children: <Widget>[
                     TextFormField(
                       controller: _emailController,
@@ -146,8 +145,8 @@ class AuthPage extends StatelessWidget {
                       validator: (String value) {
                         if (value.isEmpty)
                           return "Please input correct Email";
-                        else
-                          return null;
+
+                        return null;
                       },
                     ),
                     TextFormField(
@@ -158,8 +157,8 @@ class AuthPage extends StatelessWidget {
                       validator: (String value) {
                         if (value.isEmpty)
                           return "Please input correct password";
-                        else
-                          return null;
+
+                        return null;
                       },
                     ),
                     Container(
