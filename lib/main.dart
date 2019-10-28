@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersamples/screens/login.dart';
 import 'package:provider/provider.dart';
-
+import 'package:fluttersamples/screens/main_page.dart';
 import 'data/join_or_login.dart';
 
 void main() => runApp(MyApp());
@@ -27,13 +27,13 @@ class Splash extends StatelessWidget {
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (context, snapshot) {
 
-        if(snapshot.data == null ) {
+        if(snapshot.data == null ) { //로그인이 안된 상태
           return ChangeNotifierProvider<JoinOrLogin>.value(
               value: JoinOrLogin(),
               child: AuthPage());
         }
         else {
-
+            return MainPage(email:snapshot.data.email);
         }
       }
     );
