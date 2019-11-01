@@ -23,7 +23,6 @@ class Splash extends StatelessWidget {
     return StreamBuilder<FirebaseUser>(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (context, snapshot) {
-
         if(snapshot.data == null ) { //로그인이 안된 상태
           return ChangeNotifierProvider<JoinOrLogin>.value(
               value: JoinOrLogin(),

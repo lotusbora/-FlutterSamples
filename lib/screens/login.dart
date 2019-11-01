@@ -4,7 +4,6 @@ import 'package:fluttersamples/data/join_or_login.dart';
 import 'package:fluttersamples/helper/login_background.dart';
 import 'package:provider/provider.dart';
 import 'forget_pw.dart';
-import 'main_page.dart';
 
 class AuthPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -13,9 +12,7 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
         body: Stack(
@@ -46,8 +43,12 @@ class AuthPage extends StatelessWidget {
                           onTap: () {
                             joinOrLogin.toggle();
                           },
-                          child: Text(joinOrLogin.isJoin ? "Already Have an Account? Sign in": "Don't Have an Account? Create One",
-                            style: TextStyle(color: joinOrLogin.isJoin ? Colors.red : Colors.blue ),)
+                          child: Text(joinOrLogin.isJoin
+                              ? "Already Have an Account? Sign in"
+                              : "Don't Have an Account? Create One",
+                            style: TextStyle(
+                                color: joinOrLogin.isJoin ? Colors.red : Colors
+                                    .blue),)
                       ),
                 ),
                 Container(
@@ -60,11 +61,12 @@ class AuthPage extends StatelessWidget {
   }
 
   void _register(BuildContext context) async {
-    final AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    final AuthResult result = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
         email: _emailController.text, password: _passwordController.text);
     final FirebaseUser user = result.user;
 
-    if(user == null) {
+    if (user == null) {
       final snackBar = SnackBar(content: Text('Please try again later.'));
       Scaffold.of(context).showSnackBar(snackBar);
     }
@@ -74,11 +76,12 @@ class AuthPage extends StatelessWidget {
   }
 
   void _login(BuildContext context) async {
-    final AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    final AuthResult result = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
         email: _emailController.text, password: _passwordController.text);
     final FirebaseUser user = result.user;
 
-    if(user == null) {
+    if (user == null) {
       final snackBar = SnackBar(content: Text('Please try again later.'));
       Scaffold.of(context).showSnackBar(snackBar);
     }
@@ -100,32 +103,35 @@ class AuthPage extends StatelessWidget {
         ),
       );
 
-  Widget _authButton(Size size) => Positioned(
+  Positioned _authButton(Size size) =>
+      Positioned(
         left: size.width * 0.15,
         right: size.width * 0.15,
         bottom: 0,
         child: SizedBox(
           height: 50,
           child: Consumer<JoinOrLogin>(
-            builder: (context, joinOrLogin, child) => RaisedButton(
-                child: Text(
-                  joinOrLogin.isJoin ? "Join" : "Login",
-                  style: TextStyle(fontSize: 20, color: Colors.white)
-                ),
-                color: joinOrLogin.isJoin ? Colors.red : Colors.blue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    joinOrLogin.isJoin ? _register(context) : _login(context);
-                  }
-                }),
+            builder: (context, joinOrLogin, child) =>
+                RaisedButton(
+                    child: Text(
+                        joinOrLogin.isJoin ? "Join" : "Login",
+                        style: TextStyle(fontSize: 20, color: Colors.white)
+                    ),
+                    color: joinOrLogin.isJoin ? Colors.red : Colors.blue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        joinOrLogin.isJoin ? _register(context) : _login(
+                            context);
+                      }
+                    }),
           ),
         ), //RaisedButton
       );
 
-  Widget _inputForm(Size _size) =>
-      Padding(
+  Padding _inputForm(Size _size) {
+    return  Padding(
         padding: EdgeInsets.all(_size.width * 0.05),
         child: Card(
           shape:
@@ -162,20 +168,24 @@ class AuthPage extends StatelessWidget {
                         return null;
                       },
                     ),
-                    Container(
-                      height: 8,
-                    ),
-
+                    Container(height: 8),
                     Consumer<JoinOrLogin>(
-                      builder: (context, value, child) => Opacity(
-                        opacity: value.isJoin ? 0 : 1,
-                          child: GestureDetector(onTap:() {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPw()));
-                          },child: Text("Forget Password"))), //Opacity
-                      ),
+                      builder: (context, value, child) =>
+                          Opacity(
+                              opacity: value.isJoin ? 0 : 1,
+                              child: GestureDetector(
+                                  onTap: value.isJoin ? null : () {
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => ForgetPw()));
+                                  }
+                                  , child: Text("Forget Password"))
+                          ),
+                    ),
                   ],
                 )),
           ),
         ),
       );
+  }
+
 }

@@ -33,12 +33,12 @@ class _ForgetPwState extends State<ForgetPw> {
             return null;
           },
         ),
-            FlatButton(onPressed: () async {
-              await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text);
-              final snackBar = SnackBar(content: Text('Check your email for pw reset.'));
-              Scaffold.of(context).showSnackBar(snackBar);
-              }, child: Text('Reset Password'))
-          ],
+        FlatButton(onPressed:() async {
+          await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text);
+          final snackBar = SnackBar(content: Text('Check your email for pw reset.'));
+          Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+          }, child: Text('Reset Password'))
+        ],
         ),
       ),
     );
